@@ -1,4 +1,5 @@
 <?php
+
 // Include database connection
 include "connect.php";
 
@@ -6,10 +7,14 @@ include "connect.php";
 $sql = "SELECT * FROM product";
 $result = $conn->query($sql);
 
-// if ($_SERVER["REQUEST_METHOD"] == "GET") {
+// Initialize variables
+$backButton = false;
+$searchResults = [];
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET['name'])) {
         $search = $_GET['name'];
-        
+
         // Validate and sanitize the input to prevent SQL injection
         $search = mysqli_real_escape_string($conn, $search);
 
@@ -18,29 +23,25 @@ $result = $conn->query($sql);
         $result = $conn->query($sql);
 
         if ($result) {
+            $backButton = false;
             // Check if there are any results
-            // if ($result->num_rows > 0) {
-            //     // Fetch the results as an associative array
-            //     $rows = $result->fetch_all(MYSQLI_ASSOC);
-                
-            //     // Display the results
-            //     echo '<h2>Search Results:</h2>';
-            //     echo '<ul>';
-            //     foreach ($rows as $row) {
-            //         echo '<li>Name: ' . $row['name'] . '</li>';
-            //         echo '<li>Description: ' . $row['description'] . '</li>';
-            //         echo '<li>Price: ' . $row['price'] . '</li>';
-            //         echo '<li>Category: ' . $row['category'] . '</li>';
-            //         echo '<hr>';
-            //     }
-            //     echo '</ul>';
+            if ($result->num_rows > 0) {
+                // Fetch the results as an associative array
+              
             } else {
-                echo 'No results found.';
+                // Set the variable to display the back button
+                $backButton = true;
+            // }
             }
         } else {
+            
             // Handle the query error
-           'Error executing the query: ' . $conn->error;
+            echo 'Error executing the query: ' . $conn->error;
         }
+    }
+}
+
+
     
 ?>
 <!DOCTYPE html>
@@ -77,60 +78,36 @@ $result = $conn->query($sql);
       
       
     </ul>
-    <form action="" method="get" class="form-inline my-2 my-lg-0">
+    <!-- <form action="" method="get" class="form-inline my-2 my-lg-0">
     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="name">
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-</form>
+</form> -->
+<form action="" method="get" class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="name">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
 
-</body>
-</html>
-
-
-<!-- Display Search Results -->
-<?php
-// if (!empty($rows)) {
-//     echo '<h3>Search Results:</h3>';
-//     echo '<ul>';
-//     foreach ($rows as $row) {
-//         echo '<li>Name: ' . $row['name'] . '</li>';
-//         echo '<li>Description: ' . $row['description'] . '</li>';
-//         echo '<li>Price: ' . $row['price'] . '</li>';
-//         echo '<li>Category: ' . $row['category'] . '</li>';
-//         echo '<hr>';
-//     }
-//     echo '</ul>';
-// }
-?>
-</body>
-</html>
-
-
-
-    <!-- <form action="search.php" class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
-        <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> 
-    </form>    --> 
-    <!-- <form action="search.php" method="get" class="form-inline my-2 my-lg-0">
-    <div class="form-group mr-2">
-        <label for="searchByName" class="sr-only">Search by Name</label>
-        <input type="text" class="form-control" id="searchByName" name="name" placeholder="Search by Name">
-    </div> -->
-
-    <!-- <div class="form-group mr-2">
-        <label for="searchByCategory" class="sr-only">Search by Category</label>
-        <select class="form-control" id="searchByCategory" name="category">
-            <option value="" selected disabled>Select Category</option>
-            <option value="mobiles">Mobiles</option>
-            <option value="accessories">Accessories</option>
-          Add more categories as needed -->
-        <!-- </select>
-    </div> --> 
-
-    <!-- <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button> -->
-</form>
-
-    
+    <?php
    
+
+    // // Display back button
+    if ($backButton) {
+    echo '<button  class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="goBack()">Go Back</button>';
+    echo '<br>';
+    echo '<br>' .' no result found';
+    }
+    ?>
+    <script>
+    function goBack() {
+        // Redirect to product_view.php
+        window.location.href = 'product_view.php';
+    }
+</script> 
+
+</body>
+</html>
+
+
     
   </div>
 </nav> 
@@ -179,14 +156,7 @@ $result = $conn->query($sql);
             ?>
         </div>
     </div>
- <!-- <nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
-  </ul> -->
+
    
 </body>
 </html>
